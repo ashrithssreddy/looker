@@ -4,7 +4,7 @@
 - [3. Dimensions](#3-dimensions)
 - [4. Measures](#4-measures)
 - [5. Time Handling in Views](#5-time-handling-in-views)
-- [6 Persistent Derived Tables (PDTs)](#6-persistent-derived-tables-pdts)
+- [6. Persistent Derived Tables (PDTs)](#6-persistent-derived-tables-pdts)
 - [7. Real-World Examples](#7-real-world-examples)
 
 ## 1. What is a View?
