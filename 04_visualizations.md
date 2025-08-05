@@ -154,7 +154,10 @@ Example element:
 - **Static**: Hardcoded dashboards with predefined tiles and filters
 - **Dynamic**: Can include templated filters, variables, and links that change based on user inputs or URL params
 
-You can use Liquid variables to customize behavior dynamically.
+You can use Liquid variables to customize behavior dynamically. For example:
+- Reference user attributes to personalize content:  
+  ```liquid
+  {{ _user_attributes['region'] }}
 
 #### 🤔 When to Use LookML Over UI
 
