@@ -1,4 +1,10 @@
 # 📄 Views in Looker
+- [1. What is a View?](#1-what-is-a-view)
+- [2. View File Boilerplate](#2-view-file-boilerplate)
+- [3. Dimensions](#3-dimensions)
+- [4. Measures](#4-measures)
+- [5. Time Handling in Views](#5-time-handling-in-views)
+- [6. Real-World Examples](#6-real-world-examples)
 
 ## 1. What is a View?
 
