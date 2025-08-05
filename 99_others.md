@@ -91,31 +91,6 @@ Looker uses **real Git under the hood** — each project links to a Git repo (Gi
 
 #### 📁 Sample Git Repo Structure
 
-looker_project/  
-├── README.md  
-├── .gitignore  
-├── model/  
-│   └── main.model.lkml  
-├── views/  
-│   ├── users.view.lkml  
-│   ├── orders.view.lkml  
-│   └── products.view.lkml  
-├── dashboards/  
-│   └── ecommerce.dashboard.lookml  
-├── explores/  
-│   └── ecommerce.explore.lkml  
-├── sets/  
-│   └── shared_fields.view.lkml  
-└── manifest.lkml
-
-<pre> looker_project/ ├── README.md ├── .gitignore ├── model/ │ └── main.model.lkml ├── views/ │ ├── users.view.lkml │ ├── orders.view.lkml │ └── products.view.lkml ├── dashboards/ │ └── ecommerce.dashboard.lookml ├── explores/ │ └── ecommerce.explore.lkml ├── sets/ │ └── shared_fields.view.lkml └── manifest.lkml </pre>
-
-<pre> 
-```text looker_project/ ├── README.md ├── .gitignore ├── model/ │ └── main.model.lkml ├── views/ │ ├── users.view.lkml │ ├── orders.view.lkml │ └── products.view.lkml ├── dashboards/ │ └── ecommerce.dashboard.lookml ├── explores/ │ └── ecommerce.explore.lkml ├── sets/ │ └── shared_fields.view.lkml └── manifest.lkml ``` 
-</pre>
-
-<pre> looker_project/ ├── README.md ├── .gitignore ├── model/ │ └── main.model.lkml ├── views/ │ ├── users.view.lkml │ ├── orders.view.lkml │ └── products.view.lkml ├── dashboards/ │ └── ecommerce.dashboard.lookml ├── explores/ │ └── ecommerce.explore.lkml ├── sets/ │ └── shared_fields.view.lkml └── manifest.lkml </pre>
-
 <pre>
 looker_project/
 ├── README.md
