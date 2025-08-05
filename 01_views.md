@@ -178,7 +178,7 @@ These filters are accessible from the Explore UI without extra config.
 - You can use `datatype: date_time` in SQL Runner to preview data formats
 - Always check your warehouse’s native time functions for edge-case formatting
 
-## 6 Persistent Derived Tables (PDTs)
+## 6. Persistent Derived Tables (PDTs)
 
 A **Persistent Derived Table (PDT)** is a temporary table that Looker creates in your warehouse based on a SQL query. It's used when your logic is too complex to model directly off a raw table.
 
