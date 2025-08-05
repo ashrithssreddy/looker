@@ -133,8 +133,7 @@ looker_project/
 ├── sets/
 │   └── shared_fields.view.lkml
 └── manifest.lkml
-
-``` </pre>
+</pre>
 
 - `model/`: Contains all `.model.lkml` files (declares explores + connections)  
 - `views/`: Holds each `view:` file with dimensions and measures  
