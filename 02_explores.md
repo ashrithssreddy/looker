@@ -27,10 +27,6 @@ You can expose **only one Explore per analysis**, but that Explore can reference
 📌 TL;DR:  
 An **Explore** connects views together and acts as the interface for end users to explore data through Looker’s UI — without needing SQL.
 
-
-
-
-
 ## 2. Explore Boilerplate
 
 An Explore block lives in a **model file** (`.model.lkml`) and defines what view to explore, and what joins (if any) are allowed.
@@ -65,19 +61,6 @@ You can only have one `from:` per explore, but as many `join:` blocks as needed.
 `    sql_on: ${orders.user_id} = ${users.id} ;;`  
 `  }`  
 `}`
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ## 3. Joins
@@ -161,8 +144,64 @@ Only show rows where the `region` matches the user’s assigned region.
 
 
 ## 5. Drill Fields and Field Sets
-- `fields: [...]` for exposing limited fields
-- `set:` for reusable field groupings
+
+You can use `fields:` and `set:` to control what fields are visible or drillable inside an Explore.
+
+#### 🎯 `fields: [...]`
+Limits which dimensions and measures are exposed to users when they open the Explore.
+
+Example:  
+`fields: [orders.order_id, orders.order_date, users.first_name]`
+
+Useful for:
+- Hiding noisy or backend-only fields
+- Keeping Explores clean and focused
+
+#### 🧩 `set:` for Reusable Field Groups
+
+Define field groups once and reuse them across Explores or joins.
+
+Example:  
+`set: user_core_fields {`  
+`  fields: [users.id, users.email, users.signup_date]`  
+`}`
+
+Then include in an Explore or join like:  
+`fields: [user_core_fields]`
+
+#### 📌 Notes
+- `fields:` is allowed inside `explore`, `join`, and `set`
+- Helps reduce visual clutter for business users
+- Also useful for permissioning different Explore variants
 
 ## 6. Real-World Example
-- Complete explore with 1 base + 2 joins + filters
+
+Below is a complete `explore:` block from a model file. It starts from the `orders` view, joins `users` and `products`, and applies both an `always_filter` and `access_filter`.
+
+`explore: orders {`  
+`  from: orders`  
+
+`  always_filter: {`  
+`    filters: [orders.is_test_order: "no"]`  
+`  }`  
+
+`  access_filter: {`  
+`    field: users.region`  
+`    user_attribute: user_region`  
+`  }`  
+
+`  join: users {`  
+`    type: left_outer`  
+`    sql_on: ${orders.user_id} = ${users.id} ;;`  
+`    relationship: many_to_one`  
+`    fields: [user_core_fields]`  
+`  }`  
+
+`  join: products {`  
+`    type: left_outer`  
+`    sql_on: ${orders.product_id} = ${products.id} ;;`  
+`    relationship: many_to_one`  
+`  }`  
+`}`
+
+📌 This Explore is clean, secure, and limited in scope — ready for a business user to run analysis without touching SQL.
