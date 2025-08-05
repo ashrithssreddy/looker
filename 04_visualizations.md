@@ -155,21 +155,19 @@ Example element:
 - **Dynamic**: Can include templated filters, variables, and links that change based on user inputs or URL params
 
 You can use Liquid variables to customize behavior dynamically. For example:
-Examples:
-
 - **User attribute reference**:
-  ```
+  {% raw %}```liquid
   {{ _user_attributes['region'] }}
-  ```
+  ```{% endraw %}
 
 - **Conditional logic**:
-  ```
+  {% raw %}```liquid
   {% if parameter_name._value == 'X' %}
     Show this content
   {% else %}
     Show alternate content
   {% endif %}
-  ```
+  ```{% endraw %}
 These work inside fields like `label`, `html`, and other blocks that support dynamic runtime evaluation.
 
 #### 🤔 When to Use LookML Over UI
