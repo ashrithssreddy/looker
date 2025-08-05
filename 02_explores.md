@@ -1,3 +1,11 @@
+# 📂 Explores in Looker
+- [1. What is an Explore?](#1-what-is-an-explore)
+- [2. Explore Boilerplate](#2-explore-boilerplate)
+- [3. Joins](#3-joins)
+- [4. Filters in Explores](#4-filters-in-explores)
+- [5. Drill Fields and Field Sets](#5-drill-fields-and-field-sets)
+- [6. Real-World Example](#6-real-world-example)
+
 ## 1. What is an Explore?
 
 An **Explore** in Looker is the starting point for analysis — it defines **which view(s)** users can query, and **how they relate** to each other.
@@ -203,5 +211,3 @@ Below is a complete `explore:` block from a model file. It starts from the `orde
 `    relationship: many_to_one`  
 `  }`  
 `}`
-
-📌 This Explore is clean, secure, and limited in scope — ready for a business user to run analysis without touching SQL.
