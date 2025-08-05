@@ -62,36 +62,173 @@ Every LookML view file starts with a `view:` declaration. It's used to define fi
 
 
 
-
-
-
-
-
-
-## 2. View File Boilerplate
-- Basic example (`view: users { ... }`)
-- Required fields: `sql_table_name`, at least one `dimension`
-- Optional metadata: `label`, `description`, etc.
-
 ## 3. Dimensions
-- What is a dimension?
-- Common `type:` values (`string`, `number`, `yesno`, etc.)
-- Syntax examples
-- `dimension_group` for time-based fields
+
+A **dimension** in Looker represents a raw column or a derived field — used for grouping, filtering, or displaying raw values in reports.
+
+#### 🧠 Concept
+- Dimensions are **non-aggregated fields**
+- Think: `user_id`, `state`, `product_category`, `signup_date`
+- Business users **group by** or **filter on** dimensions in dashboards
+
+#### 🛠️ Common `type:` Values
+- `string` — text fields like names, emails, categories  
+- `number` — integers, floats, prices  
+- `yesno` — boolean flags  
+- `date`, `time`, `datetime` — date/time fields  
+- `tier` — bucketing logic (e.g., price tiers)
+
+#### 🧾 Example
+`dimension: product_name {`  
+`  type: string`  
+`  sql: ${TABLE}.product_name ;;`  
+`}`
+
+#### ⏳ dimension_group (for time fields)
+Used to auto-generate multiple time resolutions (e.g., day, week, month).
+
+`dimension_group: signup_date {`  
+`  type: time`  
+`  timeframes: [raw, date, week, month, year]`  
+`  sql: ${TABLE}.signup_ts ;;`  
+`}`
+
+#### 📌 Notes
+- Every view needs **at least one dimension**
+- Always close with `;;` in `sql:` blocks
+- You can alias columns, cast types, or derive new ones using SQL inside `sql:`
+
+
 
 ## 4. Measures
-- What is a measure?
-- Common `type:` values (`sum`, `count`, `average`, etc.)
-- Syntax examples
-- Custom SQL-based measures
+
+A **measure** is an aggregated field — used to compute metrics like totals, averages, counts. Measures are typically the numbers business users care about.
+
+#### 🧠 Concept
+- Measures apply **aggregations** on top of dimensions
+- Think: `total_sales`, `avg_order_value`, `count_users`
+- Always requires a `type:` and often a `sql:` clause
+
+#### ⚙️ Common `type:` Values
+- `count` — total number of rows  
+- `count_distinct` — unique count of a column  
+- `sum` — total of a numeric field  
+- `average` — mean value  
+- `min`, `max` — smallest/largest value  
+- `number` — use when defining a custom SQL aggregation manually
+
+#### 🧾 Simple Example
+`measure: total_sales {`  
+`  type: sum`  
+`  sql: ${TABLE}.sales_amount ;;`  
+`}`
+
+#### 🧪 Custom SQL-based Measure
+Use `type: number` when you're writing full SQL logic yourself.
+
+`measure: new_vs_repeat_ratio {`  
+`  type: number`  
+`  sql: CASE WHEN ${is_new} THEN 1 ELSE 0 END * 1.0 / COUNT(*) ;;`  
+`}`
+
+#### 📌 Notes
+- Measures appear under the "Aggregates" section in Explore UI  
+- You can reuse dimensions in measure definitions (e.g., `${price}` in sum)
+- Always validate the aggregation makes sense for the business logic
 
 ## 5. Time Handling in Views
-- `dimension_group` with `timeframes`
-- `convert_tz` and timezone handling
-- Using time filters
+
+Time-based fields in Looker are handled using `dimension_group`, which auto-generates multiple granularities from a single timestamp.
+
+#### ⏳ dimension_group with timeframes
+Use this to expose fields like `signup_date`, `signup_week`, `signup_year` — all from one column.
+
+`dimension_group: signup_date {`  
+`  type: time`  
+`  timeframes: [raw, date, week, month, quarter, year]`  
+`  sql: ${TABLE}.signup_ts ;;`  
+`}`
+
+#### 🌐 Timezone Handling with convert_tz
+If your DB stores UTC but you want reports in a local timezone:
+
+`sql: CONVERT_TZ(${TABLE}.created_at, 'UTC', 'America/Los_Angeles') ;;`
+
+- Works in MySQL and some dialects
+- In BigQuery or Snowflake, use their respective `TIMESTAMP` functions
+
+#### 🔍 Using Time Filters
+Once a `dimension_group` is defined, Looker automatically enables time filters like:
+
+- `is in the past 7 days`
+- `is on or after last month`
+- `is between date A and date B`
+
+These filters are accessible from the Explore UI without extra config.
+
+#### 📌 Notes
+- Avoid using raw timestamps directly in filters — always define `dimension_group`
+- You can use `datatype: date_time` in SQL Runner to preview data formats
+- Always check your warehouse’s native time functions for edge-case formatting
+
 
 ## 6. Real-World Examples
-- Sample ecommerce view: `orders.view.lkml`
-- Sample user profile view: `users.view.lkml`
+
+Here are two example view files to demonstrate how dimensions, measures, and time handling come together in real projects.
+
+#### 📦 orders.view.lkml
+
+`view: orders {`  
+`  sql_table_name: analytics.orders ;;`  
+
+`  dimension: order_id {`  
+`    type: number`  
+`    primary_key: yes`  
+`    sql: ${TABLE}.order_id ;;`  
+`  }`  
+
+`  dimension: customer_id {`  
+`    type: number`  
+`    sql: ${TABLE}.customer_id ;;`  
+`  }`  
+
+`  dimension_group: order_date {`  
+`    type: time`  
+`    timeframes: [date, week, month, year]`  
+`    sql: ${TABLE}.order_ts ;;`  
+`  }`  
+
+`  measure: total_revenue {`  
+`    type: sum`  
+`    sql: ${TABLE}.order_amount ;;`  
+`  }`  
+`}`
+
+#### 👤 users.view.lkml
+
+`view: users {`  
+`  sql_table_name: analytics.users ;;`  
+
+`  dimension: user_id {`  
+`    type: number`  
+`    primary_key: yes`  
+`    sql: ${TABLE}.user_id ;;`  
+`  }`  
+
+`  dimension: email {`  
+`    type: string`  
+`    sql: ${TABLE}.email_address ;;`  
+`  }`  
+
+`  dimension_group: signup_date {`  
+`    type: time`  
+`    timeframes: [date, month, year]`  
+`    sql: ${TABLE}.signup_ts ;;`  
+`  }`  
+
+`  measure: total_users {`  
+`    type: count`  
+`  }`  
+`}`
 
 
