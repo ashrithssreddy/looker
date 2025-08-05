@@ -2,4 +2,4 @@
 - [Explores](./02_explores.md)
 - [Models](./03_models.md)
 - [Visualizations](./04_visualizations.md)
-- [Misc](./99_miscellaneous.md)
+- [Miscellaneous](./99_miscellaneous.md)
