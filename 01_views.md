@@ -4,7 +4,8 @@
 - [3. Dimensions](#3-dimensions)
 - [4. Measures](#4-measures)
 - [5. Time Handling in Views](#5-time-handling-in-views)
-- [6. Real-World Examples](#6-real-world-examples)
+- [6 Persistent Derived Tables (PDTs)](#6-persistent-derived-tables-pdts)
+- [7. Real-World Examples](#7-real-world-examples)
 
 ## 1. What is a View?
 
@@ -177,8 +178,43 @@ These filters are accessible from the Explore UI without extra config.
 - You can use `datatype: date_time` in SQL Runner to preview data formats
 - Always check your warehouse’s native time functions for edge-case formatting
 
+## 6 Persistent Derived Tables (PDTs)
 
-## 6. Real-World Examples
+A **Persistent Derived Table (PDT)** is a temporary table that Looker creates in your warehouse based on a SQL query. It's used when your logic is too complex to model directly off a raw table.
+
+#### 🧠 Why Use PDTs?
+- Pre-aggregate or pre-filter large datasets
+- Optimize expensive joins or subqueries
+- Materialize logic once and reuse across views
+
+#### ⚙️ How to Define a PDT
+
+PDTs are defined inside a view using the `derived_table` block:
+
+`view: product_rollup {`  
+`  derived_table: {`  
+`    sql: SELECT product_id, SUM(sales) AS total_sales FROM orders GROUP BY 1 ;;`  
+`  }`  
+`  persist_for: "24 hours"`  
+`}`
+
+Alternatively, you can use:
+
+- `persist_for: "24 hours"` → rebuild every 24 hours  
+- `datagroup_trigger: hourly_refresh` → tie to a datagroup from your model
+
+#### 🔁 Workflow
+1. Define SQL logic in a `derived_table`
+2. Add `persist_for:` or `datagroup_trigger:` for refresh policy
+3. Use the PDT view in your Explore just like any other view
+
+#### 📌 Notes
+- The underlying warehouse must support temp tables (e.g., Snowflake, BigQuery, Redshift)
+- You can monitor PDT builds in **Looker Admin → PDTs**
+- Avoid overusing PDTs — they consume warehouse storage + compute
+
+
+## 7. Real-World Examples
 
 Here are two example view files to demonstrate how dimensions, measures, and time handling come together in real projects.
 
