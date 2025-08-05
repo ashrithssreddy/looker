@@ -116,6 +116,7 @@ looker_project/
 
 <pre> looker_project/ ├── README.md ├── .gitignore ├── model/ │ └── main.model.lkml ├── views/ │ ├── users.view.lkml │ ├── orders.view.lkml │ └── products.view.lkml ├── dashboards/ │ └── ecommerce.dashboard.lookml ├── explores/ │ └── ecommerce.explore.lkml ├── sets/ │ └── shared_fields.view.lkml └── manifest.lkml </pre>
 
+<pre> \`\`\` 
 looker_project/
 ├── README.md
 ├── .gitignore
@@ -132,7 +133,7 @@ looker_project/
 ├── sets/
 │   └── shared_fields.view.lkml
 └── manifest.lkml
-
+\`\`\` </pre>
 
 - `model/`: Contains all `.model.lkml` files (declares explores + connections)  
 - `views/`: Holds each `view:` file with dimensions and measures  
