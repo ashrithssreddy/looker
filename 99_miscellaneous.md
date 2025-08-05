@@ -1,6 +1,6 @@
 # 🧰 Miscellaneous
 - [1. Development Workflow](#1-development-workflow)
-- [2. SQL Runner](#2-sql-runner)
+- [2. SQL Runner](#2-sql-runner-optional)
 - [3. GitHub Repo in Looker](#3-github-repo-in-looker)
 
 
