@@ -1,7 +1,6 @@
 # 📂 Explores in Looker
 - [1. What is an Explore?](#1-what-is-an-explore)
 - [2. Explore Boilerplate](#2-explore-boilerplate)
-- [2.5 Persistent Derived Tables (PDTs)](#25-persistent-derived-tables-pdts)
 - [3. Joins](#3-joins)
 - [4. Filters in Explores](#4-filters-in-explores)
 - [5. Drill Fields and Field Sets](#5-drill-fields-and-field-sets)
@@ -70,43 +69,6 @@ You can only have one `from:` per explore, but as many `join:` blocks as needed.
 `    sql_on: ${orders.user_id} = ${users.id} ;;`  
 `  }`  
 `}`
-
-
-## 2.5 Persistent Derived Tables (PDTs)
-
-A **Persistent Derived Table (PDT)** is a temporary table that Looker creates in your warehouse based on a SQL query. It's used when your logic is too complex to model directly off a raw table.
-
-#### 🧠 Why Use PDTs?
-- Pre-aggregate or pre-filter large datasets
-- Optimize expensive joins or subqueries
-- Materialize logic once and reuse across views
-
-#### ⚙️ How to Define a PDT
-
-PDTs are defined inside a view using the `derived_table` block:
-
-`view: product_rollup {`  
-`  derived_table: {`  
-`    sql: SELECT product_id, SUM(sales) AS total_sales FROM orders GROUP BY 1 ;;`  
-`  }`  
-`  persist_for: "24 hours"`  
-`}`
-
-Alternatively, you can use:
-
-- `persist_for: "24 hours"` → rebuild every 24 hours  
-- `datagroup_trigger: hourly_refresh` → tie to a datagroup from your model
-
-#### 🔁 Workflow
-1. Define SQL logic in a `derived_table`
-2. Add `persist_for:` or `datagroup_trigger:` for refresh policy
-3. Use the PDT view in your Explore just like any other view
-
-#### 📌 Notes
-- The underlying warehouse must support temp tables (e.g., Snowflake, BigQuery, Redshift)
-- You can monitor PDT builds in **Looker Admin → PDTs**
-- Avoid overusing PDTs — they consume warehouse storage + compute
-
 
 ## 3. Joins
 
